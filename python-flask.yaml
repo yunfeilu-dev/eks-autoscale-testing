@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-flask
+spec:
+  selector:
+    matchLabels:
+      app: python-flask
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: python-flask
+    spec:
+      containers:
+      - name: python-flask
+        image: public.ecr.aws/i6f8k5i3/flask:v1.0.5
+        ports:
+        - containerPort: 5000
+        resources:
+          limits:
+            cpu: 200m
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-flask
+spec:
+  type: NodePort
+  selector:
+    app: python-flask
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 5000
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: python-flask
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/load-balancer-name: python-flask
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP": 80}]'
+spec:
+  rules:
+    - http:
+        paths:
+          - path: /*
+            backend:
+              serviceName: python-flask
+              servicePort: 80
+    
