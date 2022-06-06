@@ -3,10 +3,11 @@
 
 
 # Table of Contents
-1. [BackGroud] (#background)
+1. [BackGroud](#background)
 2. [EKS autoscaling strategy](#eks-autoscaling-strategy)
 3. [Test preparation](#test-preparation)
 4. [Test Result](#test-result)
+5. [Conclusion](#conclusion)
 
 ## Background
 本文针对客户第一次接触容器化，对于传统虚机动态扩缩容有一定了解，但是对于容器化平台之后如何扩缩容存在一定knowledge gap的前提下，介绍了K8s常用的扩缩容方式，并且如何使用相应的工具来对其进行压测从而验证自动扩缩机制的效果。
@@ -119,3 +120,9 @@ HOLD FOR: 整个测试的时间，考虑到auto scale本身所需要花费的时
 ![alt test](https://github.com/yunfeilu-dev/eks-autoscale-testing/blob/main/podvsnode.png?raw=true)
 
 综上，通过配合HPA，CA我们可以实现在EKS上针对应用负载量激增的快速扩容，并在流量降低后，实现自动缩容，从而经济高效地满足不同流量的场景。
+
+### Conclusion
+本次实验主要达到以下几个目的：
+1. 提供了使用AWS console创建EKS的方法，并且解释了几个关键选项的原理以及背后需要注意的事项
+2. 提供了基于aws服务的压测平台
+3. 提供了测试报告以及参数选择可以做参考
