@@ -41,7 +41,8 @@ The Kubernetes Vertical Pod Autoscaler automatically adjusts the CPU and memory 
 
 **Prerequisite**
 <br>
-- 首先需要准备一个集群 [EKS Cluster](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html)，这里使用AWS console为例：
+### 首先需要准备一个集群 [EKS Cluster](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html)
+这里使用AWS console为例：
 
 #### 配置VPC
 ![alt text](https://github.com/yunfeilu-dev/eks-autoscale-testing/blob/main/VPC-setup.png?raw=true)如上图 我们创建了拥有3个三个私有子网，三个公有子网的VPC，并且同时会创建NAT，IGW，以及s3 endpoint（optional）。可以根据自己的实际需要再创建后对该VPC进行调整。（注意事项，子网必须有合适的路由表将流量导出至IGW或者是NAT，否则子网内的worker node无法注册成功）
@@ -67,9 +68,11 @@ Node IAM role配置参考策略：https://docs.aws.amazon.com/zh_cn/eks/latest/u
         --role-arn arn:aws:iam::aws_account_id:role/role_name`
 3. kubectl get nodes
 
-- [Kubernetes Metrics Server](https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html)
-- [Cluster Autoscaler](https://docs.aws.amazon.com/eks/latest/userguide/autoscaling.html)
-</br>
+
+
+### [Kubernetes Metrics Server](https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html)
+### [Cluster Autoscaler](https://docs.aws.amazon.com/eks/latest/userguide/autoscaling.html)
+
 
 ### Demo workload setup
 
