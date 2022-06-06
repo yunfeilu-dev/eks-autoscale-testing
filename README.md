@@ -41,7 +41,7 @@ The Kubernetes Vertical Pod Autoscaler automatically adjusts the CPU and memory 
 
 **Prerequisite**
 <br>
-### 首先需要准备一个集群 [EKS Cluster](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html)
+### 1. 首先需要准备一个集群 [EKS Cluster](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html)
 这里使用AWS console为例：
 
 #### 配置VPC
@@ -70,8 +70,8 @@ Node IAM role配置参考策略：https://docs.aws.amazon.com/zh_cn/eks/latest/u
 
 
 
-### [Kubernetes Metrics Server](https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html)
-### [Cluster Autoscaler](https://docs.aws.amazon.com/eks/latest/userguide/autoscaling.html)
+### 2. 配置[Kubernetes Metrics Server](https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html)
+### 3. 配置[Cluster Autoscaler](https://docs.aws.amazon.com/eks/latest/userguide/autoscaling.html)
 
 
 ### Demo workload setup
