@@ -3,9 +3,13 @@
 
 
 # Table of Contents
-1. [EKS autoscaling strategy](#eks-autoscaling-strategy)
-2. [Test preparation](#test-preparation)
-3. [Test Result](#test-result)
+1. [BackGroud] (#background)
+2. [EKS autoscaling strategy](#eks-autoscaling-strategy)
+3. [Test preparation](#test-preparation)
+4. [Test Result](#test-result)
+
+## Background
+本文针对客户第一次接触容器化，对于传统虚机动态扩缩容有一定了解，但是对于容器化平台之后如何扩缩容存在一定knowledge gap的前提下，介绍了K8s常用的扩缩容方式，并且如何使用相应的工具来对其进行压测从而验证自动扩缩机制的效果。
 
 ## EKS Autoscaling Strategy
 
@@ -26,7 +30,7 @@ The Kubernetes Vertical Pod Autoscaler automatically adjusts the CPU and memory 
 
 
 
-通常可以将三者结合来使用，在pod层面先做扩容，如果pod数量或者所占资源达到worker node的限制，再由CA实现进一步的cluster层面的扩容。可以参考下图了解HPA+CA的扩容的流程。
+以上介绍的是三种常见的K8S自动扩缩容方式，也同样适用于EKS。通常可以将三者结合来使用，在pod层面先做扩容，如果pod数量或者所占资源达到worker node的限制，再由CA实现进一步的cluster层面的扩容。可以参考下图了解HPA+CA的扩容的流程。
 
 ![alt text](https://github.com/yunfeilu-dev/eks-autoscale-testing/blob/main/HPA+CA.png?raw=true)
 
@@ -37,7 +41,9 @@ The Kubernetes Vertical Pod Autoscaler automatically adjusts the CPU and memory 
 
 **Prerequisite**
 <br>
-- [EKS Cluster](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html)
+- 首先需要准备一个集群 [EKS Cluster](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html)
+
+asdf
 - [Kubernetes Metrics Server](https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html)
 - [Cluster Autoscaler](https://docs.aws.amazon.com/eks/latest/userguide/autoscaling.html)
 </br>
@@ -51,6 +57,8 @@ The Kubernetes Vertical Pod Autoscaler automatically adjusts the CPU and memory 
 2. 配置HPA
 
     `kubectl autoscale deployment python-flask --cpu-percent=50 --min=1 --max=50`
+    这里需要注意的点在于HPA会以container的resource request为指标，来计算是否需要增加新的pod来承担负载
+    
 
 
 ### Distributed Load Test setup
@@ -60,7 +68,7 @@ The Kubernetes Vertical Pod Autoscaler automatically adjusts the CPU and memory 
 
 ```
 TASK COUNT: Fargate task数量（对标K8S pod数量）
-CONCURRENCY: 每个task模拟的用户数量。所以一次load test测试的总concurrency数量实际是(TASK COUNT)* CONCURRENCY
+CONCURRENCY: 每个task模拟的用户数量。所以一次load test测试的总concurrency数量实际是(TASK COUNT) * CONCURRENCY
 RAMP UP: 到达流量峰值需要的时间。时间越短代表模拟场景的流量激增越迅速
 HOLD FOR: 整个测试的时间，考虑到auto scale本身所需要花费的时间，所以建议测试时间不要过短，这样才能清楚的看到auto scale前后的变化
 ```
