@@ -41,9 +41,32 @@ The Kubernetes Vertical Pod Autoscaler automatically adjusts the CPU and memory 
 
 **Prerequisite**
 <br>
-- 首先需要准备一个集群 [EKS Cluster](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html)
+- 首先需要准备一个集群 [EKS Cluster](https://docs.aws.amazon.com/eks/latest/userguide/getting-started.html)，这里使用AWS console为例：
 
-asdf
+#### 配置VPC
+![alt text](https://github.com/yunfeilu-dev/eks-autoscale-testing/blob/main/VPC-setup.png?raw=true)如上图 我们创建了拥有3个三个私有子网，三个公有子网的VPC，并且同时会创建NAT，IGW，以及s3 endpoint（optional）。可以根据自己的实际需要再创建后对该VPC进行调整。（注意事项，子网必须有合适的路由表将流量导出至IGW或者是NAT，否则子网内的worker node无法注册成功）
+
+#### EKS集群创建
+
+集群创建中，可以选择默认的public endpoint cluster。这时候worker node和cluster control plane的通信会离开vpc，但是不会离开amazon网络。详情见下图：
+![alt text](https://github.com/yunfeilu-dev/eks-autoscale-testing/blob/main/EKS-public-endpoint.png?raw=true)
+#### NodeGroup
+
+Node IAM role配置参考策略：https://docs.aws.amazon.com/zh_cn/eks/latest/userguide/create-node-role.html#create-worker-node-role
+![alt text](https://github.com/yunfeilu-dev/eks-autoscale-testing/blob/main/nodegroup.png?raw=true)
+
+在step3，选择私有子网的subnet
+![alt text](https://github.com/yunfeilu-dev/eks-autoscale-testing/blob/main/subnet.png?raw=true)
+
+#### 通过kubectl验证nodes已经注册
+
+1. 安装kubectl
+2. 更新kube config加入eks的集群 `aws eks update-kubeconfig \
+        --region region-code \
+        --name my-cluster \
+        --role-arn arn:aws:iam::aws_account_id:role/role_name`
+3. kubectl get nodes
+
 - [Kubernetes Metrics Server](https://docs.aws.amazon.com/eks/latest/userguide/metrics-server.html)
 - [Cluster Autoscaler](https://docs.aws.amazon.com/eks/latest/userguide/autoscaling.html)
 </br>
